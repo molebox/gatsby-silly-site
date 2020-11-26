@@ -1,6 +1,6 @@
 import React from "react";
 import CanvasContainer from "./../components/canvas-container";
-import loadable from '@loadable/component'
+import loadable from "@loadable/component";
 import { KeyStoke } from "./../components/key-stoke";
 import {
   Flex,
@@ -36,7 +36,9 @@ import Amatic from "../assets/fonts/Amatic SC_Bold.json";
 import DistortBlob from "./../components/distort-blob";
 import { CirclePicker } from "react-color";
 
-const KeyboardEventHandler = loadable.lib(() => import('react-keyboard-event-handler'))
+const KeyboardEventHandler = loadable.lib(() =>
+  import("react-keyboard-event-handler")
+);
 
 const defaultLetters = [
   "Y",
@@ -63,17 +65,11 @@ export default () => {
   const [blobDistort, setBlobDistort] = React.useState(0.5);
   const [blobSpeed, setBlobSpeed] = React.useState(8);
   const [blobColor, setBlobColor] = React.useState("#00A38D");
-  const [noSSR, setNoSSR] = React.useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef();
 
-  React.useEffect(() => {
-    if (typeof window !== undefined) {
-      setNoSSR(true);
-    }
-  }, [])
-
   const handleKeyPress = (key) => {
+    console.log({key})
     if (key === "space") {
       strokes.push("   ");
       setStrokes([...strokes]);
@@ -321,13 +317,11 @@ export default () => {
               );
             })}
           </ThreeFlex>
-          {noSSR ? (
           <KeyboardEventHandler
-          handleFocusableElements={true}
-          handleKeys={["all"]}
-          onKeyEvent={(key, e) => handleKeyPress(key)}
-        />
-          ) : null}
+            handleFocusableElements={true}
+            handleKeys={["all"]}
+            onKeyEvent={(key, e) => handleKeyPress(key)}
+          />
         </CanvasContainer>
       </Box>
     </Flex>
