@@ -36,7 +36,7 @@ import Amatic from "../assets/fonts/Amatic SC_Bold.json";
 import DistortBlob from "./../components/distort-blob";
 import { CirclePicker } from "react-color";
 
-const KeyboardEventHandler = loadable.lib(() =>
+const KeyboardEventHandler = loadable(() =>
   import("react-keyboard-event-handler")
 );
 
