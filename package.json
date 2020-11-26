@@ -1,0 +1,40 @@
+{
+  "name": "gatsby-silly-site",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "HAINES-DESKTOP\\richa",
+  "license": "MIT",
+  "scripts": {
+    "dev": "gatsby develop",
+    "build": "gatsby build",
+    "clean": "gatsby clean",
+    "pretty-check": "prettier --check \"src/**/*.{js}\"",
+    "pretty": "prettier --write \"src/**/*js\"",
+    "z": "gatsby clean && gatsby develop"
+  },
+  "dependencies": {
+    "@chakra-ui/icons": "^1.0.1",
+    "@chakra-ui/react": "^1.0.1",
+    "@emotion/react": "^11.1.1",
+    "@emotion/styled": "^11.0.0",
+    "@react-three/cannon": "^0.5.3",
+    "@react-three/drei": "^2.2.7",
+    "@react-three/flex": "^0.5.2",
+    "framer-motion": "^2.9.4",
+    "gatsby": "^2.27.2",
+    "gatsby-plugin-google-fonts": "^1.0.1",
+    "gsap": "^3.5.1",
+    "nice-color-palettes": "^3.0.0",
+    "react": "^17.0.1",
+    "react-color": "^2.19.3",
+    "react-dom": "^17.0.1",
+    "react-keyboard-event-handler": "^1.5.4",
+    "react-three-fiber": "^5.3.3",
+    "react-use-gesture": "^8.0.1",
+    "three": "^0.122.0",
+    "use-sound": "^2.0.1"
+  },
+  "devDependencies": {
+    "prettier": "^2.2.0"
+  }
+}
