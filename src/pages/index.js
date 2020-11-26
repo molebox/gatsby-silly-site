@@ -1,6 +1,6 @@
 import React from "react";
 import CanvasContainer from "./../components/canvas-container";
-import KeyboardEventHandler from "react-keyboard-event-handler";
+import loadable from '@loadable/component'
 import { KeyStoke } from "./../components/key-stoke";
 import {
   Flex,
@@ -25,7 +25,6 @@ import {
   NumberInputStepper,
   NumberIncrementStepper,
   NumberDecrementStepper,
-  Input,
 } from "@chakra-ui/react";
 import { SettingsIcon } from "@chakra-ui/icons";
 import { Flex as ThreeFlex, Box as ThreeBox } from "@react-three/flex";
@@ -36,6 +35,8 @@ import Jost from "../assets/fonts/Jost_ 500 Medium_Regular.json";
 import Amatic from "../assets/fonts/Amatic SC_Bold.json";
 import DistortBlob from "./../components/distort-blob";
 import { CirclePicker } from "react-color";
+
+const KeyboardEventHandler = loadable.lib(() => import('react-keyboard-event-handler'))
 
 const defaultLetters = [
   "Y",
