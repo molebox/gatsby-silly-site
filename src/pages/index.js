@@ -65,6 +65,8 @@ export default () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef();
 
+  const noSSR = typeof window !== undefined;
+
   const handleKeyPress = (key) => {
     if (key === "space") {
       strokes.push("   ");
@@ -313,11 +315,13 @@ export default () => {
               );
             })}
           </ThreeFlex>
+          {noSSR ? (
           <KeyboardEventHandler
-            handleFocusableElements={true}
-            handleKeys={["all"]}
-            onKeyEvent={(key, e) => handleKeyPress(key)}
-          />
+          handleFocusableElements={true}
+          handleKeys={["all"]}
+          onKeyEvent={(key, e) => handleKeyPress(key)}
+        />
+          ) : null}
         </CanvasContainer>
       </Box>
     </Flex>
