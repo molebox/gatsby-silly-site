@@ -62,10 +62,15 @@ export default () => {
   const [blobDistort, setBlobDistort] = React.useState(0.5);
   const [blobSpeed, setBlobSpeed] = React.useState(8);
   const [blobColor, setBlobColor] = React.useState("#00A38D");
+  const [noSSR, setNoSSR] = React.useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef();
 
-  const noSSR = typeof window !== undefined;
+  React.useEffect(() => {
+    if (typeof window !== undefined) {
+      setNoSSR(true);
+    }
+  }, [])
 
   const handleKeyPress = (key) => {
     if (key === "space") {
