@@ -25,6 +25,8 @@ import {
   NumberInputStepper,
   NumberIncrementStepper,
   NumberDecrementStepper,
+  Grid,
+  Image,
 } from "@chakra-ui/react";
 import { SettingsIcon } from "@chakra-ui/icons";
 import { Flex as ThreeFlex, Box as ThreeBox } from "@react-three/flex";
@@ -35,41 +37,31 @@ import Jost from "../assets/fonts/Jost_ 500 Medium_Regular.json";
 import Amatic from "../assets/fonts/Amatic SC_Bold.json";
 import DistortBlob from "./../components/distort-blob";
 import { CirclePicker } from "react-color";
-
+import { Html } from "@react-three/drei";
+import Sticker from "./../components/sticker";
+import RobotModel from "./../components/folder/robot-model";
 const KeyboardEventHandler = loadable(() =>
   import("react-keyboard-event-handler")
 );
-
-const defaultLetters = [
-  "Y",
-  "O",
-  "U",
-  "   ",
-  "C",
-  "A",
-  "N",
-  "   ",
-  "D",
-  "R",
-  "A",
-  "G",
-  "   ",
-  "U",
-  "S",
-];
+// const Sticker = loadable(() => import('./../components/sticker'));
 
 export default () => {
-  const [strokes, setStrokes] = React.useState(defaultLetters);
+  const [strokes, setStrokes] = React.useState([]);
   const [selectedFont, setSelectedFont] = React.useState(Nerko);
   const [blobs, setBlobs] = React.useState([]);
+  const [kanyes, setKanyes] = React.useState([]);
   const [blobDistort, setBlobDistort] = React.useState(0.5);
   const [blobSpeed, setBlobSpeed] = React.useState(8);
   const [blobColor, setBlobColor] = React.useState("#00A38D");
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [addRobot, setAddRobot] = React.useState(false);
   const btnRef = React.useRef();
 
+  React.useEffect(() => {
+    console.log({ kanyes });
+  }, [kanyes]);
+
   const handleKeyPress = (key) => {
-    console.log({key})
     if (key === "space") {
       strokes.push("   ");
       setStrokes([...strokes]);
@@ -79,6 +71,10 @@ export default () => {
       setStrokes([...strokes]);
     } else if (key === "enter") {
       strokes.push(" ");
+      setStrokes([...strokes]);
+    } else if (key === "esc") {
+      const esc = strokes.indexOf("esc");
+      strokes.splice(esc, 1);
       setStrokes([...strokes]);
     } else {
       setStrokes([...strokes, key.toUpperCase()]);
@@ -119,7 +115,24 @@ export default () => {
   };
   const clearCanvas = () => {
     setBlobs([]);
-    setStrokes(defaultLetters);
+    setStrokes([]);
+  };
+  const getKanye = (value) => {
+    console.log({ value });
+    switch (value) {
+      case "Happy":
+        setKanyes([...kanyes, "/kanye-happy.png"]);
+        break;
+      case "Stevie":
+        setKanyes([...kanyes, "/stevie-kanye.png"]);
+        break;
+      default:
+        setKanyes([...kanyes, "/kanye-happy.png"]);
+        break;
+    }
+  };
+  const addRobotToPage = (value) => {
+    setAddRobot({ addRobot: value });
   };
 
   return (
@@ -183,14 +196,17 @@ export default () => {
         placement="right"
         onClose={onClose}
         finalFocusRef={btnRef}
+        size="md"
       >
         <DrawerOverlay>
           <DrawerContent>
             <DrawerCloseButton />
-            <DrawerHeader>Settings</DrawerHeader>
-
+            <DrawerHeader alignSelf="center">Settings</DrawerHeader>
+            <Text as="p" alignSelf="center" fontWeight={700}>
+              Hit ESC to exit
+            </Text>
             <DrawerBody>
-              <Stack spacing="24px">
+              <Flex w="100%" justify="space-evenly" my={6}>
                 <Menu isLazy>
                   <MenuButton
                     variant="outline"
@@ -214,6 +230,31 @@ export default () => {
                     </MenuItem>
                   </MenuList>
                 </Menu>
+                <Menu isLazy>
+                  <MenuButton
+                    variant="outline"
+                    as={Button}
+                    rightIcon={<SettingsIcon />}
+                  >
+                    Models
+                  </MenuButton>
+                  <MenuList>
+                    <MenuItem onClick={() => addRobotToPage(true)}>
+                      Mech Drone
+                    </MenuItem>
+                  </MenuList>
+                </Menu>
+              </Flex>
+
+              <Grid
+                templateColumns="repeat(auto-fill, minmax(300px, 1fr))"
+                autoRows="auto"
+                gap={5}
+                alignItems="center"
+                justifyContent={["space-evenly"]}
+                p={1}
+                w="100%"
+              >
                 <Flex
                   direction="column"
                   border="solid 1px"
@@ -222,8 +263,10 @@ export default () => {
                   boxShadow="xl"
                   rounded="md"
                 >
-                  <Text fontSize="xl">Configure Blob</Text>
-                  <Stack my={2}>
+                  <Text fontSize="xl" textAlign="center" fontWeight={700} m={0}>
+                    Configure a blob
+                  </Text>
+                  <Stack>
                     <Text>Select Distort</Text>
                     <NumberInput
                       onChange={(value) => getDistortValue(value)}
@@ -262,11 +305,40 @@ export default () => {
                     </Button>
                   </Stack>
                 </Flex>
-              </Stack>
+
+                {/* <Flex
+                  direction="column"
+                  border="solid 1px"
+                  p={3}
+                  borderRadius={5}
+                  boxShadow="xl"
+                  rounded="md"
+                >
+                  <Text fontSize="xl" textAlign="center" fontWeight={700}>Pick a Kanye</Text>
+                  <Grid 
+                  templateColumns="1fr 1fr"
+                  templateRows="1fr 50px"
+                  placeItems="center"
+                  >
+                    <Flex direction="column" gridColumn={1} p={1}>
+                    <Text m={0}>Happy Kanye</Text>
+                    <Image _hover={{cursor: 'pointer', transform: 'scale(1.1)'}} onClick={() => getKanye('Happy')} boxSize="80px" fit="contain" src="/kanye-happy.png"/>
+                    </Flex>
+                    <Flex direction="column" gridColumn={2} p={1}>
+                    <Text m={0}>Stevie Kanye</Text>
+                    <Image _hover={{cursor: 'pointer', transform: 'scale(1.1)'}} onClick={() => getKanye('Stevie')} boxSize="80px" fit="contain" src="/stevie-kanye.png"/>
+                    </Flex>
+
+                    <Button gridRow={2} gridColumn="1 / -1" w="100%" variant="outline" onClick={() => addKanyeToPage()}>
+                      Add Kanye
+                    </Button>
+                  </Grid>
+                </Flex> */}
+              </Grid>
             </DrawerBody>
 
             <DrawerFooter>
-              <Button variant="outline" mr={3} onClick={onClose}>
+              <Button variant="outline" onClick={onClose}>
                 Save
               </Button>
             </DrawerFooter>
@@ -300,6 +372,15 @@ export default () => {
                 />
               ))
             : null}
+          {/* {kanyes.length ? kanyes.map((item, index) => (
+              <Sticker key={index} texture={item}/>
+            )) : null} */}
+          {/* {kanyes.length ? kanyes.map((item, index) => (
+              <Html>
+              <Image key={index} src={item}/>
+              </Html>
+            )) : null} */}
+          {addRobot ? <RobotModel /> : null}
           <ThreeFlex
             position={[-15, 8, 0]}
             margin={0.09}
@@ -311,7 +392,12 @@ export default () => {
           >
             {strokes.map((key, index) => {
               return (
-                <ThreeBox key={index} marginLeft={1} cursor="pointer">
+                <ThreeBox
+                  key={index}
+                  marginLeft={1}
+                  marginTop={1}
+                  cursor="pointer"
+                >
                   <KeyStoke selectedFont={selectedFont} keyStroke={key} />
                 </ThreeBox>
               );

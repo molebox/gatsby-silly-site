@@ -1,5 +1,5 @@
 import React from "react";
-import { usePlane } from "@react-three/cannon";
+
 /**
  * The plane which the cubes fall onto
  */
