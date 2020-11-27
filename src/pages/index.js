@@ -36,10 +36,14 @@ import OpenSans from "../assets/fonts/Open Sans_Regular.json";
 import Jost from "../assets/fonts/Jost_ 500 Medium_Regular.json";
 import Amatic from "../assets/fonts/Amatic SC_Bold.json";
 import DistortBlob from "./../components/distort-blob";
+import HappyKanye from "../assets/stickers/kanye-happy.jpg";
+import StevieKanye from "../assets/stickers/stevie-kanye.jpg";
 import { CirclePicker } from "react-color";
 import { Html } from "@react-three/drei";
 import Sticker from "./../components/sticker";
-import RobotModel from "./../components/folder/robot-model";
+import RobotModel from "../components/models/robot-model";
+import gsap from "gsap";
+import PhoenixModel from "./../components/models/phoenix-model";
 const KeyboardEventHandler = loadable(() =>
   import("react-keyboard-event-handler")
 );
@@ -55,7 +59,19 @@ export default () => {
   const [blobColor, setBlobColor] = React.useState("#00A38D");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [addRobot, setAddRobot] = React.useState(false);
+  const [addPhoenix, setAddPhoenix] = React.useState(false);
   const btnRef = React.useRef();
+  const strokeRef = React.useRef();
+
+  React.useEffect(() => {
+    if (typeof window !== undefined) {
+      gsap.to(strokeRef.current, {
+        duration: 2.5,
+        ease: "back.out(1.7)",
+        y: -500,
+      });
+    }
+  }, []);
 
   React.useEffect(() => {
     console.log({ kanyes });
@@ -63,7 +79,7 @@ export default () => {
 
   const handleKeyPress = (key) => {
     if (key === "space") {
-      strokes.push("   ");
+      strokes.push(" ", " ");
       setStrokes([...strokes]);
     } else if (key === "backspace") {
       const back = strokes.indexOf("backspace");
@@ -116,23 +132,25 @@ export default () => {
   const clearCanvas = () => {
     setBlobs([]);
     setStrokes([]);
+    setKanyes([]);
+    setAddPhoenix(false);
+    setAddRobot(false);
   };
   const getKanye = (value) => {
-    console.log({ value });
     switch (value) {
       case "Happy":
-        setKanyes([...kanyes, "/kanye-happy.png"]);
+        setKanyes([...kanyes, HappyKanye]);
         break;
       case "Stevie":
-        setKanyes([...kanyes, "/stevie-kanye.png"]);
-        break;
-      default:
-        setKanyes([...kanyes, "/kanye-happy.png"]);
+        setKanyes([...kanyes, StevieKanye]);
         break;
     }
   };
   const addRobotToPage = (value) => {
     setAddRobot({ addRobot: value });
+  };
+  const addPhoenixToPage = (value) => {
+    setAddPhoenix({ addPhoenix: value });
   };
 
   return (
@@ -164,9 +182,9 @@ export default () => {
               justifySelf="flex-start"
               w="100%"
             >
-              Use your keyboard to create letters and drag anything on the
-              canvas. You can also create weird and wonderful things via the
-              settings. Go have fun you little rascal!
+              Start typing or create weird and wonderful things via the
+              settings. Anything on the canvas can be dragged about. Go have fun
+              you little rascal!
             </Text>
             <Button
               alignSelf="flex-end"
@@ -196,15 +214,12 @@ export default () => {
         placement="right"
         onClose={onClose}
         finalFocusRef={btnRef}
-        size="md"
+        size="sm"
       >
         <DrawerOverlay>
           <DrawerContent>
             <DrawerCloseButton />
             <DrawerHeader alignSelf="center">Settings</DrawerHeader>
-            <Text as="p" alignSelf="center" fontWeight={700}>
-              Hit ESC to exit
-            </Text>
             <DrawerBody>
               <Flex w="100%" justify="space-evenly" my={6}>
                 <Menu isLazy>
@@ -241,6 +256,9 @@ export default () => {
                   <MenuList>
                     <MenuItem onClick={() => addRobotToPage(true)}>
                       Mech Drone
+                    </MenuItem>
+                    <MenuItem onClick={() => addPhoenixToPage(true)}>
+                      Phoenix
                     </MenuItem>
                   </MenuList>
                 </Menu>
@@ -285,7 +303,7 @@ export default () => {
                       onChange={(value) => getSpeedValue(value)}
                       defaultValue={8}
                       min={0}
-                      max={10}
+                      max={50}
                     >
                       <NumberInputField />
                       <NumberInputStepper>
@@ -322,11 +340,11 @@ export default () => {
                   >
                     <Flex direction="column" gridColumn={1} p={1}>
                     <Text m={0}>Happy Kanye</Text>
-                    <Image _hover={{cursor: 'pointer', transform: 'scale(1.1)'}} onClick={() => getKanye('Happy')} boxSize="80px" fit="contain" src="/kanye-happy.png"/>
+                    <Image _hover={{cursor: 'pointer', transform: 'scale(1.1)'}} onClick={() => getKanye('Happy')} boxSize="80px" fit="contain" src={HappyKanye}/>
                     </Flex>
                     <Flex direction="column" gridColumn={2} p={1}>
                     <Text m={0}>Stevie Kanye</Text>
-                    <Image _hover={{cursor: 'pointer', transform: 'scale(1.1)'}} onClick={() => getKanye('Stevie')} boxSize="80px" fit="contain" src="/stevie-kanye.png"/>
+                    <Image _hover={{cursor: 'pointer', transform: 'scale(1.1)'}} onClick={() => getKanye('Stevie')} boxSize="80px" fit="contain" src={StevieKanye}/>
                     </Flex>
 
                     <Button gridRow={2} gridColumn="1 / -1" w="100%" variant="outline" onClick={() => addKanyeToPage()}>
@@ -336,12 +354,6 @@ export default () => {
                 </Flex> */}
               </Grid>
             </DrawerBody>
-
-            <DrawerFooter>
-              <Button variant="outline" onClick={onClose}>
-                Save
-              </Button>
-            </DrawerFooter>
           </DrawerContent>
         </DrawerOverlay>
       </Drawer>
@@ -372,15 +384,14 @@ export default () => {
                 />
               ))
             : null}
-          {/* {kanyes.length ? kanyes.map((item, index) => (
-              <Sticker key={index} texture={item}/>
-            )) : null} */}
-          {/* {kanyes.length ? kanyes.map((item, index) => (
-              <Html>
-              <Image key={index} src={item}/>
-              </Html>
-            )) : null} */}
+          {kanyes.length
+            ? kanyes.map((item, index) => {
+                console.log({ item });
+                return <Sticker key={index} imagePath={item} />;
+              })
+            : null}
           {addRobot ? <RobotModel /> : null}
+          {addPhoenix ? <PhoenixModel /> : null}
           <ThreeFlex
             position={[-15, 8, 0]}
             margin={0.09}
@@ -394,7 +405,7 @@ export default () => {
               return (
                 <ThreeBox
                   key={index}
-                  marginLeft={1}
+                  marginLeft={0.5}
                   marginTop={1}
                   cursor="pointer"
                 >
