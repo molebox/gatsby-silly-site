@@ -165,24 +165,27 @@ export default () => {
       <Flex
         direction="column"
         w="100%"
+        maxW="1440px"
+        align="center"
         justify="space-between"
       >
      
           <Text as="h1" mt={6} fontSize="5xl" fontFamily="heading">
             Craaaaaazy Canvas
           </Text>
+
             <Text
               as="p"
               mb={6}
               fontSize="md"
               fontFamily="heading"
-              alignSelf="flex-end"
-              justifySelf="flex-start"
+              
               // w="100%"
             >
               Start typing or create weird and wonderful things via the
               settings. Anything on the canvas can be dragged about.
             </Text>
+            <Flex w="100%" align="center" justify="space-evenly">
             <Button
               // alignSelf={["center", "flex-end"]}
               mb={6}
@@ -201,6 +204,7 @@ export default () => {
             >
               Settings
             </Button>
+            </Flex>
      
     
       </Flex>
