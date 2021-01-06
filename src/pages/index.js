@@ -163,16 +163,14 @@ export default () => {
       bgColor="brand.bg"
     >
       <Flex
-        direction={["column", "row"]}
-        align="center"
-        w="1440px"
+        direction="column"
+        w="100%"
         justify="space-between"
       >
-        <Flex direction="column">
+     
           <Text as="h1" mt={6} fontSize="5xl" fontFamily="heading">
             Craaaaaazy Canvas
           </Text>
-          <Flex w="1440px" align="flex-start" justify="space-around">
             <Text
               as="p"
               mb={6}
@@ -180,14 +178,13 @@ export default () => {
               fontFamily="heading"
               alignSelf="flex-end"
               justifySelf="flex-start"
-              w="100%"
+              // w="100%"
             >
               Start typing or create weird and wonderful things via the
-              settings. Anything on the canvas can be dragged about. Go have fun
-              you little rascal!
+              settings. Anything on the canvas can be dragged about.
             </Text>
             <Button
-              alignSelf="flex-end"
+              // alignSelf={["center", "flex-end"]}
               mb={6}
               variant="outline"
               onClick={clearCanvas}
@@ -195,9 +192,8 @@ export default () => {
               Clear Canvas
             </Button>
             <Button
-              alignSelf="flex-end"
+              // alignSelf={["center", "flex-end"]}
               mb={6}
-              ml={3}
               ref={btnRef}
               variant="outline"
               onClick={onOpen}
@@ -205,8 +201,8 @@ export default () => {
             >
               Settings
             </Button>
-          </Flex>
-        </Flex>
+     
+    
       </Flex>
 
       <Drawer
